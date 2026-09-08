@@ -1,0 +1,10 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+!include customer.puml
+!include contact_person.puml
+!include service_provider.puml
+!include seeders.puml
+!include controllers.puml
+
+@enduml

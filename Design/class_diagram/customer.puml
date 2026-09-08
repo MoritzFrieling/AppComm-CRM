@@ -1,0 +1,46 @@
+@startuml
+'https://plantuml.com/class-diagram
+package App {
+	package Models {
+		class Customer {
+			customer_name: string
+			registration_number: string
+			vat_number: string
+			email: string
+			website: string
+			address_street: string
+			address_house_number: string
+			address_postal_code: string
+			address_city: string
+			address_country: string
+			address_additional_information: string?
+			active: string
+			contact_persons(): HasMany
+		}
+	}
+	package Repositories{
+		class CustomerRepository {
+			+ all(): Collection
+			+ find(registration_number: string): Customer
+			+ create(data: array): Customer
+			+ update(registration_number: string, data: array): Customer
+			+ delete(registration_number: string): void
+			+ setActive(registration_number: string, active: bool): Customer
+		}
+	}
+	package Interfaces {
+		interface CustomerRepositoryInterface {
+			+ all(): Collection
+			+ find(registration_number: string): Customer
+			+ create(data: array): Customer
+			+ update(registration_number: string, data: array): Customer
+			+ delete(registration_number: string): void
+			+ setActive(registration_number: string, active: bool): Customer
+		}
+	}
+}
+
+CustomerRepositoryInterface <|-- CustomerRepository
+CustomerRepository --> Customer
+
+@enduml

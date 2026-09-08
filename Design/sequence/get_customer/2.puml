@@ -1,0 +1,55 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+skinparam maxMessageSize 150
+autonumber 6
+header Laravel Request Lifecycle
+footer Page 2 of 4
+
+title Creating and loading the Kernel instance
+
+participant "index.php" as index
+activate index
+participant App as appClass
+
+index -> appClass: make(Kernel::class)
+activate appClass
+
+
+create participant Kernel as kernelClass
+appClass -> kernelClass: Create instance
+
+kernelClass -> kernelClass: bootstrap()
+activate kernelClass
+
+kernelClass -> appClass: bootstrapWith()
+note left
+This method will register all
+the application's bindings,
+service providers, and facades.
+For simplicity this part is omitted, and
+instead we will skip to the moment the
+RouteServiceProvider is executed.
+end note
+activate appClass
+create participant RouteServiceProvider as routeServiceProviderClass
+appClass -> routeServiceProviderClass: Create instance
+
+appClass -> routeServiceProviderClass: boot()
+activate routeServiceProviderClass
+
+routeServiceProviderClass -> "routes/web.php" ** : include
+note right of "routes/web.php"
+This file contains the route definitions
+end note
+
+return
+appClass --> kernelClass
+deactivate appClass
+
+kernelClass --> appClass
+deactivate kernelClass
+
+appClass -> index: return Kernel instance
+deactivate appClass
+@enduml

@@ -1,0 +1,41 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+skinparam maxMessageSize 150
+autonumber 17
+header Laravel Request Lifecycle
+footer Page 2 of 4
+
+title Handling the request
+
+participant "index.php" as index
+activate index
+participant Kernel as kernelClass
+database Database as db order 20000
+
+index -> kernelClass: handle(Request::capture())
+activate kernelClass
+
+create participant CustomerRepository as customerRepositoryClass order 1
+kernelClass -> customerRepositoryClass: Create instance
+
+create participant CustomerController as customerControllerClass
+kernelClass -> customerControllerClass: Create instance with CustomerRepository
+
+kernelClass -> customerControllerClass: show(1)
+activate customerControllerClass
+
+customerControllerClass -> customerRepositoryClass: find(1)
+activate customerRepositoryClass
+
+customerRepositoryClass -> db: retrieve customer with id 1 and related data
+activate db
+return Customer
+
+return Customer
+
+return Rendered view with Customer data
+create participant Response as responseClass
+kernelClass -> responseClass: Create instance with rendered view
+return Response
+@enduml

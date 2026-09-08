@@ -1,0 +1,41 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+skinparam maxMessageSize 150
+autonumber 28
+header Laravel Request Lifecycle
+footer Page 2 of 4
+
+title Handling the request
+
+actor User order 0
+participant Webserver order 0
+participant "index.php" as index
+participant Response as responseClass
+participant Kernel as kernelClass
+
+activate Webserver
+activate index
+
+index -> responseClass: send()
+activate responseClass
+
+responseClass -> responseClass: sendHeaders()
+activate responseClass
+responseClass -> Webserver: send headers
+Webserver -> User: Response Headers
+deactivate responseClass
+responseClass -> responseClass: sendContent()
+activate responseClass
+responseClass -> Webserver: send content
+Webserver -> User: Response Body
+deactivate responseClass
+
+return Response
+
+index -> kernelClass: terminate()
+destroy kernelClass
+
+index --> Webserver: Signal execution is done
+deactivate index
+@enduml

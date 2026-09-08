@@ -1,0 +1,41 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+package App {
+	package Http {
+		package Controllers {
+			class Controller {
+
+			}
+			class CustomerController {
+				- customerRepository: CustomerRepositoryInterface
+				+ index()
+				+ create()
+				+ store(request: StoreCustomerRequest)
+				+ show(registration_number: string)
+				+ edit(registration_number: string)
+				+ update(request: UpdateCustomerRequest, registration_number: string)
+				+ destroy(registration_number: string)
+				+ active(registration_number: string, active: string)
+			}
+			class ContactPersonController {
+				- customerRepository: CustomerRepositoryInterface
+				- contactPersonRepository: ContactPersonRepositoryInterface
+				+ index(registration_number: string)
+				+ create(registration_number: string)
+				+ store(request: StoreContactPersonRequest, registration_number: string)
+				+ show(registration_number: string, id: string)
+				+ edit(registration_number: string, id: string)
+				+ update(request: UpdateContactPersonRequest, registration_number: string, id: string)
+				+ destroy(registration_number: string, id: string)
+			}
+			Controller <|-- CustomerController
+			Controller <|-- ContactPersonController
+			CustomerController --> CustomerRepositoryInterface
+			ContactPersonController --> CustomerRepositoryInterface
+			ContactPersonController --> ContactPersonRepositoryInterface
+		}
+	}
+}
+
+@enduml

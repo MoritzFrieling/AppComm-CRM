@@ -1,0 +1,25 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+package Database {
+	package Seeders {
+		class CustomerSeeder {
+			+ run()
+		}
+		CustomerSeeder --> Customer
+		class ContactPersonSeeder {
+			+ run()
+		}
+		ContactPersonSeeder --> ContactPerson
+		class AdminUserSeeder {
+			+ run()
+		}
+		class DatabaseSeeder {
+			+ run()
+		}
+		AdminUserSeeder --> User
+		Seeder ()-- DatabaseSeeder
+	}
+}
+
+@enduml

@@ -1,0 +1,30 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+skinparam maxMessageSize 150
+autonumber
+header Laravel Request Lifecycle
+footer Page 1 of 4
+
+title Creating and loading the App instance
+
+actor User
+participant Webserver
+participant "index.php" as index
+participant "app.php" as app
+
+activate Webserver
+User -> Webserver: GET /customers/1
+
+Webserver -> index: loading
+activate index
+
+index -> app: include
+activate app
+
+create participant App as appClass
+app -> appClass: Create instance
+
+return App instance
+deactivate app
+@enduml

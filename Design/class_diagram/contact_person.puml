@@ -1,0 +1,41 @@
+@startuml
+'https://plantuml.com/class-diagram
+package App {
+	package Models {
+		class ContactPerson {
+			customer_id: int
+			gender: string
+			first_name: string
+			middle_name: string?
+			last_name: string
+			email: string
+			phone_number: string
+			function: string
+			customer(): BelongsTo
+		}
+		ContactPerson "0..n" --* "1" Customer
+	}
+	package Interfaces {
+		interface ContactPersonRepositoryInterface {
+			all(): Collection
+			find(registration_number: string, id: int): ContactPerson
+			create(registration_number: string, data: Array): ContactPerson
+			update(registration_number: string, data: Array): ContactPerson
+			delete(registration_number: string, id: int): void
+		}
+	}
+	package Repositories {
+		class ContactPersonRepository {
+			all(): Collection
+			find(registration_number: string, id: int): ContactPerson
+            create(registration_number: string, data: Array): ContactPerson
+            update(registration_number: string, data: Array): ContactPerson
+            delete(registration_number: string, id: int): void
+		}
+	}
+}
+
+ContactPersonRepositoryInterface <|-- ContactPersonRepository
+ContactPersonRepository --> ContactPerson
+
+@enduml

@@ -1,0 +1,121 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+header Laravel Request Lifecycle
+footer Page %page% of %lastpage%
+
+actor User
+participant Webserver
+participant "index.php" as index
+participant "app.php" as app
+database Database as db order 20000
+
+activate Webserver
+User -> Webserver: GET /customers/1
+
+Webserver -> index: loading
+activate index
+
+index -> app: include
+activate app
+
+create participant App as appClass
+app -> appClass: Create instance
+
+return App instance
+deactivate app
+
+
+index -> appClass: make(Kernel::class)
+activate appClass
+
+
+create participant Kernel as kernelClass
+appClass -> kernelClass: Create instance
+
+kernelClass -> kernelClass: bootstrap()
+activate kernelClass
+
+kernelClass -> appClass: bootstrapWith()
+note left
+This method will register all
+the application's bindings,
+service providers, and facades.
+For simplicity this part is omitted, and
+instead we will skip to the moment the
+RouteServiceProvider is executed.
+end note
+activate appClass
+create participant RouteServiceProvider as routeServiceProviderClass
+appClass -> routeServiceProviderClass: Create instance
+
+appClass -> routeServiceProviderClass: boot()
+activate routeServiceProviderClass
+
+routeServiceProviderClass -> "routes/web.php" ** : include
+note right of "routes/web.php"
+This file contains the route definitions
+end note
+
+return
+appClass --> kernelClass
+deactivate appClass
+
+kernelClass --> appClass
+deactivate kernelClass
+
+appClass -> index: return Kernel instance
+deactivate appClass
+
+index -> kernelClass: handle(Request::capture())
+activate kernelClass
+
+create participant CustomerRepository as customerRepositoryClass order 1
+kernelClass -> customerRepositoryClass: Create instance
+
+create participant CustomerController as customerControllerClass
+kernelClass -> customerControllerClass: Create instance with CustomerRepository
+
+kernelClass -> customerControllerClass: show(1)
+activate customerControllerClass
+
+customerControllerClass -> customerRepositoryClass: find(1)
+activate customerRepositoryClass
+
+customerRepositoryClass -> db: retrieve customer with\nid 1 and related data
+activate db
+return Customer
+
+return Customer
+
+return Rendered view with Customer data
+create participant Response as responseClass
+kernelClass -> responseClass: Create instance with rendered view
+return Response
+
+index -> responseClass: send()
+activate responseClass
+
+responseClass -> responseClass: sendHeaders()
+activate responseClass
+responseClass -> Webserver: send headers
+Webserver -> User: Response Headers
+deactivate responseClass
+responseClass -> responseClass: sendContent()
+activate responseClass
+responseClass -> Webserver: send content
+Webserver -> User: Response Body
+deactivate responseClass
+
+return Response
+
+index -> kernelClass: terminate()
+destroy kernelClass
+
+index --> Webserver: Signal execution is done
+deactivate index
+
+
+
+@enduml
