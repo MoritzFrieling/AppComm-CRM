@@ -4,6 +4,12 @@ For our agile process, this is our [Jira Board](https://chatrobot-appcomm.atlass
 Decision regarding the Activity Diagram: Since the different Use Cases are only loosly connected regarding the business processes and there is no value of modelling the flow between different activities, the Activity Daigram won't be part of the Analysis part.
 
 
+## Technology stack
+
+The committed application uses PHP with Laravel, Vue 3 with Inertia.js, Tailwind CSS, and Vite. The database configuration defaults to MySQL, while the GitHub Actions test workflow uses SQLite.
+
+PostgreSQL was also used during the project, but the PostgreSQL-specific implementation has not been pushed to this repository.
+
 # Demonstration:
 Slower Version: https://www.youtube.com/watch?v=-SpPc_ozoU0
 
